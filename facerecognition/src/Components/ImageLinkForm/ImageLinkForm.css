@@ -1,0 +1,10 @@
+.form{
+    width: 700px;
+    background-color:navy;
+
+    background:
+    radial-gradient(circle at 100% 50%, transparent 20%, rgba(255, 247, 20, 0.44) 21%, rgba(255, 247, 20, 0.44) 34%, transparent 35%, transparent),
+    radial-gradient(circle at 0% 50%, transparent 20%, rgba(255, 247, 20, 0.44) 21%, rgba(255, 247, 20, 0.44) 34%, transparent 35%, transparent) 0 -50px;
+    background-color: rgb(84, 235, 255);
+    background-size:75px 100px;
+}
