@@ -27,6 +27,9 @@ const Register = ({ onRouteChange}) =>{
                                 type="submit" 
                                 value="Register"
                                 onClick = {()=>onRouteChange('home')}/>
+                        </div> 
+                        <div className="lh-copy mt3">
+                            <p onClick={()=>onRouteChange('signin')} href="#0" className="f6 link dim black db pointer" > Go back to Sign In</p>
                         </div>
                     </div>
                 </main>
