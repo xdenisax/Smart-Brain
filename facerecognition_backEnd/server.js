@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors);
+app.use(cors());
 
 const db = {
     users:[
@@ -36,17 +36,15 @@ const db = {
 }
 
 app.get('/', (req,res)=>{
-    res.send("working...");
+    res.send(db.users);
 });
 
 app.post('/signin',(req,res)=>{
     bcrypt.compare("cookies", '$2a$10$vGtzvJ8jYMTRYmP6FojEieZSesn4sjPm.pxwQKVtZFtAiwGdGmrES', (err, res)=>{
         console.log(res);
     }); 
-    console.log("din server", req.body.email, req.body.password);
     if(req.body.email === db.users[0].email && req.body.password === db.users[0].password){
-        
-        res.status(200).json('succes');
+        res.status(200).json(db.users[0]);
     }else{
         res.status(404).json('user not in bd');
     }
@@ -54,14 +52,14 @@ app.post('/signin',(req,res)=>{
 
 app.post('/register',(req,res)=>{
     const { email, name, password } = req.body;
-    bcrypt.hash(password, null,null,(err, hash) =>{
-        console.log(hash);
-    });
+    // bcrypt.hash(password, null,null,(err, hash) =>{
+    //     console.log(hash);
+    // });
+
     db.users.push({
         id:'125',
         name:name,
         email: email,
-        password: password,
         entries:0,
         joined:new Date()
     });
@@ -70,11 +68,12 @@ app.post('/register',(req,res)=>{
 
 app.get('/profile/:id',(req,res)=>{
     const {id} = req.params;
-    const found= false;
+    let found= false;
     db.users.forEach(user => {
         if(user.id === id ){
-            return res.json(user);
+            console.log(user.name)
             found = true;
+            return res.json(user);
         }
     });
     if(found === false){
@@ -84,12 +83,12 @@ app.get('/profile/:id',(req,res)=>{
 
 app.put('/image', (req,res)=>{
     const {id} = req.body;
-    const found= false;
+    let found= false;
     db.users.forEach(user => {
         if(user.id === id ){
             user.entries++;
-            return res.json(user.entries);
             found = true;
+            return res.json(user.entries);
         }
     });
     if(found === false){

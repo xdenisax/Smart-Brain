@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 
 class Register extends React.Component {
     constructor(props){
@@ -21,22 +22,16 @@ class Register extends React.Component {
     }
 
     onSubmitEvent = () =>{
-        fetch('http://localhost:5000/register',{
-            method: 'post',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-                email: this.state.email,
-                password: this.state.password,
-                name:this.state.name
-            })
-        }).then((response)=>response.json())
-        .then(user =>{
+        axios.post('http://localhost:5000/register',{
+            email: this.state.email,
+            password: this.state.password,
+            name:this.state.name 
+        })
+        .then(user => {
             if(user){
+                console.log(user)
                 this.props.onRouteChange('home');
                 this.props.loadUser(user);
-
             }
         });
     }

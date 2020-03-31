@@ -18,42 +18,11 @@ class SignIn extends React.Component {
     }
 
     onSubmitSignInEvent = async () =>{
-        console.log("fetch starts")
-
-        // let response = await axios.post('http://localhost:5000/signin', {
-        //     email: this.state.signInEmail,
-        //     password: this.state.signInPassword
-        // },{
-        //       headers: { "content-type": "application/json" }
-        //   });
-        //   console.log(response);
-          
-        // axios.post('http://localhost:5000/signin', {
-        //     email: this.state.signInEmail,
-        //     password: this.state.signInPassword
-        //   })
-        //   .then(function (response) {
-        //     console.log(response);
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error);
-        //   });
-
-          axios.post('http://localhost:5000/', {
-            email: this.state.signInEmail,
-            password: this.state.signInPassword
-          })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-
         // fetch('http://localhost:5000/signin',{
         //     method: 'POST',
-        //     header:{
-        //         'Content-Type': 'multipart/form-data'
+        //     headers:{
+        //         'Access-Control-Allow-Origin': '*',
+        //         'Content-Type': 'application/json'
         //     },
         //     body: JSON.stringify({
         //         email: this.state.signInEmail,
@@ -68,27 +37,17 @@ class SignIn extends React.Component {
         //     //     this.props.onRouteChange('home');
         // });
 
-        // axios({
-        //     method: 'post',
-        //     url: 'http://localhost:5000/signin',
-        //     data: {
-        //         email: this.state.signInEmail,
-        //         password: this.state.signInPassword
-        //     },
-        //     validateStatus: (status) => {
-        //       return true; 
-        //     },
-        //   }).catch(error => {
-        //       console.log(error);
-        //   }).then(response=>{
-        //         return response.json();
-        //   }).then(data =>{
-        //         console.log(data);
-        //         // if(data==="succes")
-        //         //     this.props.onRouteChange('home');
-        //   });
-
-        console.log('sdfs',this.state.signInEmail, this.state.signInPassword)
+         axios.post('http://localhost:5000/signin', {
+            email: this.state.signInEmail,
+            password: this.state.signInPassword
+            
+        })
+        .then(user=>{
+            if(user.data.id){
+                this.props.loadUser(user.data);
+                this.props.onRouteChange('home');
+            }
+        });
     }
     render(){
         const {onRouteChange} = this.props;
