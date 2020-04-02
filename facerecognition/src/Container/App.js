@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
-import Navigation from './Components/Navigation/Navigation'
-import Logo from './Components/Logo/Logo'
-import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm'
-import Rank from './Components/Rank/Rank'
-import FaceRecognition from './Components/FaceRecognition/FaceRecognition'
-import SignIn from './Components/SignIn/SignIn'
-import Register from './Components/Register/Register'
+import Navigation from '../Components/Navigation/Navigation'
+import Logo from '../Components/Logo/Logo'
+import ImageLinkForm from '../Components/ImageLinkForm/ImageLinkForm'
+import Rank from '../Components/Rank/Rank'
+import FaceRecognition from '../Components/FaceRecognition/FaceRecognition'
+import SignIn from '../Components/SignIn/SignIn'
+import Register from '../Components/Register/Register'
 import 'tachyons';
 import Particles from 'react-particles-js';
 import Clarifai from 'clarifai'
@@ -23,27 +23,27 @@ const particlesOption = {
   }
 }
 
-const app = new Clarifai.App({
-  apiKey:'f7a8639bed764de6842c42d1ea7f8c02'
-})
 
+
+const initalState={
+  input:'',
+  imageURL:'',
+  box:{},
+  route:'signin', 
+  isSigedIn:false,
+  user: {
+        id:'',
+        name:'',
+        email: '',
+        entries:0,
+        joined:""
+  }
+}
 class App extends Component {
 
   constructor(){
     super();
-    this.state = {
-      input:'',
-      imageURL:'',
-      box:{},
-      route:'signin', 
-      user: {
-            id:'',
-            name:'',
-            email: '',
-            entries:0,
-            joined:""
-      }
-    }
+    this.state = initalState;
   }
 
   loadUser= (data)=>{
@@ -61,7 +61,7 @@ class App extends Component {
   }
 
   calculateFaceLocation = (data)=>{
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const clarifaiFace = data.data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById('inputImage');
     const width = Number(image.width);
     const height= Number(image.height);
@@ -83,26 +83,29 @@ class App extends Component {
 
   onSubmit = (event) =>{
     this.setState({imageURL:this.state.input})
-    app.models
-    .predict(
-      Clarifai.FACE_DETECT_MODEL, 
-      this.state.input)
+    axios.post('http://localhost:5000/imageURL', {input:this.state.input})
     .then((response)=> {
-        if(response){
+      if(response){
           axios.put('http://localhost:5000/image',{
             id:this.state.user.id
           })
           .then(count=>{
-            console.log(count.data)
             this.setState(Object.assign(this.state.user, { entries: count.data}));
-          });
+          })
+          .catch(console.log);
       }
+      console.log(response)
       this.displayFaceBox(this.calculateFaceLocation(response))
     }).catch(err => console.log(err));
   }
 
   onRouteChange =(route) =>{
-    this.setState({route:route})
+    if(route==='signin'){
+      this.setState(initalState);
+    }else if (route==='home'){
+      this.setState({isSigedIn:true});
+    }
+    this.setState({route:route});
   }
  
 

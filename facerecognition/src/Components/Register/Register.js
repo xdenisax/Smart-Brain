@@ -28,10 +28,10 @@ class Register extends React.Component {
             name:this.state.name 
         })
         .then(user => {
+            console.log("***",user.data)
             if(user){
-                console.log(user)
+                this.props.loadUser(user.data);
                 this.props.onRouteChange('home');
-                this.props.loadUser(user);
             }
         });
     }

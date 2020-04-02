@@ -18,29 +18,9 @@ class SignIn extends React.Component {
     }
 
     onSubmitSignInEvent = async () =>{
-        // fetch('http://localhost:5000/signin',{
-        //     method: 'POST',
-        //     headers:{
-        //         'Access-Control-Allow-Origin': '*',
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         email: this.state.signInEmail,
-        //         password: this.state.signInPassword
-        //     })
-        // }).then(response=>{
-        //     return response.json();
-        // }).catch(err=>console.log(err))
-        // .then(data =>{
-        //     console.log(data);
-        //     // if(data==="succes")
-        //     //     this.props.onRouteChange('home');
-        // });
-
          axios.post('http://localhost:5000/signin', {
             email: this.state.signInEmail,
             password: this.state.signInPassword
-            
         })
         .then(user=>{
             if(user.data.id){
